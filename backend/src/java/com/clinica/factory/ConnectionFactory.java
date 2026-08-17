@@ -5,8 +5,11 @@
 package com.clinica.factory;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 /**
  *
@@ -14,16 +17,19 @@ import java.sql.SQLException;
  */
 public class ConnectionFactory {
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "1234";
+    private static DataSource dataSource;
 
-    public static Connection getConnection() throws SQLException {
+    static {
         try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new SQLException("Driver PostgreSQL não encontrado.", e);
+            Context ctx = new InitialContext();
+            dataSource = (DataSource) ctx.lookup("jdbc/postgres");
+
+        } catch (NamingException e) {
+            throw new RuntimeException("Erro ao buscar o DataSource JNDI. Verifique o nome cadastrado no GlassFish.", e);
         }
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+    }
+    
+    public static Connection getConnection() throws SQLException {
+        return dataSource.getConnection();
     }
 }
