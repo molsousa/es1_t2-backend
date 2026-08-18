@@ -9,10 +9,10 @@ import java.util.List;
 
 public class PetDAO {
 
-    public int inserir(Pet pet) throws SQLException {
-        String sql = "INSERT INTO \"Pet\" (nome_pet, data_nascimento, id_tutor, id_especie, id_raca, id_sexo) "
-                + "VALUES (?, ?, ?, ?, ?, ?) RETURNING id_pet";
-        try (Connection conn = ConnectionFactory.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+    public int inserir(Pet pet, Connection conn) throws SQLException {
+        String sql = "INSERT INTO \"Pet\" (nome_pet, data_nascimento, id_tutor, id_especie, id_raca, id_sexo) " +
+                     "VALUES (?, ?, ?, ?, ?, ?) RETURNING id_pet";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, pet.getNome());
             stmt.setDate(2, Date.valueOf(pet.getDataNascimento()));
             stmt.setInt(3, pet.getTutorId());

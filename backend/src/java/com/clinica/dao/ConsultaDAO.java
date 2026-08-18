@@ -9,10 +9,10 @@ import java.util.List;
 
 public class ConsultaDAO {
 
-    public int inserir(Consulta consulta) throws SQLException {
-        String sql = "INSERT INTO \"Consulta\" (data_consulta, hora_consulta, motivo, id_pet, id_veterinario, id_atendente) "
-                + "VALUES (?, ?, ?, ?, ?, ?) RETURNING id_consulta";
-        try (Connection conn = ConnectionFactory.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+    public int inserir(Consulta consulta, Connection conn) throws SQLException {
+        String sql = "INSERT INTO \"Consulta\" (data_consulta, hora_consulta, motivo, id_pet, id_veterinario, id_atendente) " +
+                     "VALUES (?, ?, ?, ?, ?, ?) RETURNING id_consulta";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setDate(1, Date.valueOf(consulta.getDataConsulta()));
             stmt.setTime(2, Time.valueOf(consulta.getHoraConsulta()));
             stmt.setString(3, consulta.getMotivo());
@@ -31,7 +31,9 @@ public class ConsultaDAO {
     public List<Consulta> listarTodos() throws SQLException {
         List<Consulta> lista = new ArrayList<>();
         String sql = "SELECT id_consulta, data_consulta, hora_consulta, motivo, id_pet, id_veterinario, id_atendente FROM \"Consulta\"";
-        try (Connection conn = ConnectionFactory.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Consulta c = new Consulta();
                 c.setId(rs.getInt("id_consulta"));
@@ -45,9 +47,5 @@ public class ConsultaDAO {
             }
         }
         return lista;
-    }
-
-    public void atualizarStatus(int id, String status) throws SQLException {
-
     }
 }

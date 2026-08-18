@@ -21,10 +21,10 @@ public class VacinaDAO {
         return -1;
     }
 
-    public int inserir(Vacina vacina) throws SQLException {
-        String sql = "INSERT INTO \"VacinaAplicada\" (data_aplicacao, dose, observacao, id_pet, id_vacina, id_veterinario) "
-                + "VALUES (?, ?, ?, ?, ?, ?) RETURNING id_vacina_aplicada";
-        try (Connection conn = ConnectionFactory.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+    public int inserir(Vacina vacina, Connection conn) throws SQLException {
+        String sql = "INSERT INTO \"VacinaAplicada\" (data_aplicacao, dose, observacao, id_pet, id_vacina, id_veterinario) " +
+                     "VALUES (?, ?, ?, ?, ?, ?) RETURNING id_vacina_aplicada";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setDate(1, Date.valueOf(vacina.getDataAplicacao()));
             stmt.setString(2, vacina.getDose() != null ? vacina.getDose() : "1");
             stmt.setString(3, vacina.getObservacao() != null ? vacina.getObservacao() : "");

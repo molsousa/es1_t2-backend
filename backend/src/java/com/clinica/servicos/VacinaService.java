@@ -1,8 +1,10 @@
 package com.clinica.servicos;
 
 import com.clinica.dao.VacinaDAO;
+import com.clinica.factory.ConnectionFactory;
 import com.clinica.model.Vacina;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -16,7 +18,26 @@ public class VacinaService {
         if (vacina.getPetId() <= 0 || vacina.getNomeVacina() == null || vacina.getDataAplicacao() == null) {
             throw new IllegalArgumentException("Dados da vacina incompletos.");
         }
-        return dao.inserir(vacina);
+
+        Connection conn = null;
+        try {
+            conn = ConnectionFactory.getConnection();
+            conn.setAutoCommit(false);
+
+            int id = dao.inserir(vacina, conn);
+
+            conn.commit();
+            return id;
+
+        } catch (SQLException e) {
+            if (conn != null) conn.rollback();
+            throw e;
+        } finally {
+            if (conn != null) {
+                conn.setAutoCommit(true);
+                conn.close();
+            }
+        }
     }
 
     public List<Vacina> listarPendentes() throws SQLException {
@@ -29,11 +50,11 @@ public class VacinaService {
                 })
                 .collect(Collectors.toList());
     }
-
+    
     public List<Vacina> listarTodas() throws SQLException {
         return dao.listarTodas();
     }
-
+    
     public List<Vacina> listarTodasAplicacoes() throws SQLException {
         return dao.listarTodasAplicacoes();
     }
