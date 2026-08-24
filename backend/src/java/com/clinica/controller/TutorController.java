@@ -57,7 +57,7 @@ public class TutorController extends HttpServlet {
             }
         }
 
-        // Caso 2: Listar todos (já existente)
+        // Caso 2: Listar todos
         try {
             List<Tutor> tutores = service.listarTodos();
             resp.setContentType("application/json");
