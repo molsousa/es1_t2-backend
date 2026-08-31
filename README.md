@@ -10,7 +10,7 @@
 
 ## Descrição
 
-Este trabalho contém a implementação da camada de negócios para o segundo trabalho da disciplina de Engenharia de Software.
+Este trabalho contém a implementação da camada de negócios para o segundo trabalho da disciplina de Engenharia de Software I.
 
 ## Implementação
 
