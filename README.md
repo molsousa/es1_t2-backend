@@ -108,6 +108,8 @@ Caso seja um serviço de transação, é aberto conexão com o banco e então é
 
 Após a manipulação do dado no banco, o método no pacote `DAO` retorna ao serviço que fecha a transação (se aberta), retornando ao `Controller` e na camada de apresentação mostra a operação bem sucedida ao usuário.
 
+**Obs:** A arquitetura do projeto está incompleta, alguns códigos-fonte estão em locais inapropriados, esse código servirá apenas para referência.
+
 --- 
 
 
